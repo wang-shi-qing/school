@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消息</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body {
+            background-color: #fff;
+            color: #333;
+        }
+        /* 顶部导航 */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            position: relative;
+        }
+        .top-nav .icon {
+            width: 24px;
+            height: 24px;
+        }
+        /* 筛选栏 */
+        .filter-bar {
+            display: flex;
+            padding: 10px 15px;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .filter-item {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        .filter-item.active {
+            background-color: #409eff;
+            color: #fff;
+        }
+        /* 消息列表 */
+        .msg-list {
+            padding: 0 15px;
+        }
+        .msg-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid #f5f5f5;
+            align-items: center;
+            position: relative;
+        }
+        .msg-item.clickable {
+            cursor: pointer;
+        }
+        .msg-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .msg-content {
+            flex: 1;
+        }
+        .msg-title {
+            font-size: 17px;
+            font-weight: 500;
+        }
+        .msg-desc {
+            font-size: 13px;
+            color: #999;
+            margin-top: 4px;
+        }
+        .msg-time {
+            font-size: 13px;
+            color: #999;
+        }
+        .msg-badge {
+            position: absolute;
+            left: 40px;
+            top: 10px;
+            background-color: #f56c6c;
+            color: #fff;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* 底部导航 */
+        .bottom-nav {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+            padding: 8px 0;
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .nav-item.active {
+            color: #409eff;
+        }
+        .nav-icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部 -->
+    <div class="top-nav">
+        <span class="icon">☰</span>
+        <span>消息</span>
+        <div>
+            <span class="icon">🔍</span>
+            <span class="icon">➕</span>
+        </div>
+    </div>
+
+    <!-- 筛选栏 -->
+    <div class="filter-bar">
+        <div class="filter-item">全部</div>
+        <div class="filter-item">日程</div>
+        <div class="filter-item active">课程表</div>
+        <div class="filter-item">待办</div>
+        <div class="filter-item">会议</div>
+    </div>
+
+    <!-- 消息列表 -->
+    <div class="msg-list">
+        <div class="msg-item">
+            <div class="msg-icon" style="background:#2b7de9;">学</div>
+            <div class="msg-badge">13</div>
+            <div class="msg-content">
+                <div class="msg-title">学工系统</div>
+                <div class="msg-desc">第二课堂</div>
+            </div>
+            <div class="msg-time">昨天</div>
+        </div>
+
+        <!-- 可点击的消息中心，跳转到表单 -->
+        <div class="msg-item clickable" onclick="location.href='form.html'">
+            <div class="msg-icon" style="background:#36cc9b;">🎤</div>
+            <div class="msg-content">
+                <div class="msg-title">消息中心</div>
+                <div class="msg-desc">【学生请假申请】流程办理提醒</div>
+            </div>
+            <div class="msg-time">4/28</div>
+        </div>
+
+        <div class="msg-item">
+            <div class="msg-icon" style="background:#ffc82e;">📋</div>
+            <div class="msg-badge">11</div>
+            <div class="msg-content">
+                <div class="msg-title">行业资讯</div>
+                <div class="msg-desc">同事们在看《吕世亮把苗女的眼神，画进…</div>
+            </div>
+            <div class="msg-time">9:24</div>
+        </div>
+
+        <div class="msg-item">
+            <div class="msg-icon" style="background:#e64340;">❤️</div>
+            <div class="msg-badge">12</div>
+            <div class="msg-content">
+                <div class="msg-title">学生工作</div>
+                <div class="msg-desc">薪火相传强本领，经验分享促成长——工…</div>
+            </div>
+            <div class="msg-time">8:30</div>
+        </div>
+
+        <div class="msg-item">
+            <div class="msg-icon" style="background:#ff7979;">🏆</div>
+            <div class="msg-badge">2</div>
+            <div class="msg-content">
+                <div class="msg-title">学科竞赛</div>
+                <div class="msg-desc">关于2026“上证杯”全国高校ETF知识及理…</div>
+            </div>
+            <div class="msg-time">昨天</div>
+        </div>
+
+        <div class="msg-item">
+            <div class="msg-icon" style="background:#4cd2b3;">💼</div>
+            <div class="msg-badge">12</div>
+            <div class="msg-content">
+                <div class="msg-title">就业创业服务</div>
+                <div class="msg-desc">理想照亮前程，信念引领未来 | 护理学院…</div>
+            </div>
+            <div class="msg-time">昨天</div>
+        </div>
+
+        <div class="msg-item">
+            <div class="msg-icon" style="background:#42c89c;">👥</div>
+            <div class="msg-badge">17</div>
+            <div class="msg-content">
+                <div class="msg-title">团学服务</div>
+                <div class="msg-desc">山西工商学院团讯（2026年第3期）</div>
+            </div>
+            <div class="msg-time">昨天</div>
+        </div>
+
+        <div class="msg-item">
+            <div class="msg-icon" style="background:#40b4e5;">📝</div>
+            <div class="msg-badge">2</div>
+            <div class="msg-content">
+                <div class="msg-title">一周小结</div>
+                <div class="msg-desc">查收你的企业微信一周小结</div>
+            </div>
+            <div class="msg-time">星期五</div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">💬</div>
+            <span>消息</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">📩</div>
+            <span>邮件</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">📄</div>
+            <span>文档</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">📊</div>
+            <span>工作台</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">👥</div>
+            <span>通讯录</span>
+        </div>
+    </div>
+</body>
+</html>

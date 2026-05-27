@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消息中心</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background-color: #fff;
+        }
+        /* 顶部导航 */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        .top-nav h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .menu-btn {
+            position: absolute;
+            left: 15px;
+            font-size: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        /* 标签栏 */
+        .tab-bar {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            padding: 5px 0;
+            cursor: pointer;
+        }
+        .tab-item.active {
+            color: #0066cc;
+            border-bottom: 2px solid #0066cc;
+        }
+        /* 消息列表 */
+        .message-list {
+            padding: 10px;
+        }
+        .message-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
+        .message-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .message-content {
+            flex: 1;
+        }
+        .message-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .message-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        .badge {
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="top-nav">
+        <button class="menu-btn">☰</button>
+        <h1>消息</h1>
+    </div>
+
+    <!-- 标签栏 -->
+    <div class="tab-bar">
+        <div class="tab-item">全部</div>
+        <div class="tab-item">日程</div>
+        <div class="tab-item active">课程表</div>
+        <div class="tab-item">待办</div>
+        <div class="tab-item">会议</div>
+    </div>
+
+    <!-- 消息列表 -->
+    <div class="message-list">
+        <div class="message-item">
+            <div class="message-icon" style="background-color: #0066cc;">学</div>
+            <div class="message-content">
+                <div class="message-title">学工系统 <span class="badge">13</span></div>
+                <div class="message-desc">第二课堂</div>
+            </div>
+        </div>
+
+        <!-- 关键：点击这条消息会打开请假申请页面 -->
+        <div class="message-item" onclick="window.location.href='preview.html'">
+            <div class="message-icon" style="background-color: #4CAF50;">🎤</div>
+            <div class="message-content">
+                <div class="message-title">消息中心</div>
+                <div class="message-desc">【学生请假申请】流程办理提醒</div>
+            </div>
+        </div>
+
+        <div class="message-item">
+            <div class="message-icon" style="background-color: #FFC107;">📋</div>
+            <div class="message-content">
+                <div class="message-title">行业资讯 <span class="badge">11</span></div>
+                <div class="message-desc">同事们在看《吕世亮把苗女的眼神，画进...</div>
+            </div>
+        </div>
+
+        <div class="message-item">
+            <div class="message-icon" style="background-color: #F44336;">❤️</div>
+            <div class="message-content">
+                <div class="message-title">学生工作 <span class="badge">12</span></div>
+                <div class="message-desc">薪火相传强本领，经验分享促成长——工...</div>
+            </div>
+        </div>
+
+        <div class="message-item">
+            <div class="message-icon" style="background-color: #FF6B6B;">🏆</div>
+            <div class="message-content">
+                <div class="message-title">学科竞赛 <span class="badge">2</span></div>
+                <div class="message-desc">关于2026“上证杯”全国高校ETF知识及理...</div>
+            </div>
+        </div>
+
+        <div class="message-item">
+            <div class="message-icon" style="background-color: #4CAF50;">💼</div>
+            <div class="message-content">
+                <div class="message-title">就业创业服务 <span class="badge">12</span></div>
+                <div class="message-desc">理想照亮前程，信念引领未来 | 护理学院...</div>
+            </div>
+        </div>
+
+        <div class="message-item">
+            <div class="message-icon" style="background-color: #4CAF50;">👥</div>
+            <div class="message-content">
+                <div class="message-title">团学服务 <span class="badge">17</span></div>
+                <div class="message-desc">山西工商学院团讯 (2026年第3期)</div>
+            </div>
+        </div>
+
+        <div class="message-item">
+            <div class="message-icon" style="background-color: #42A5F5;">📝</div>
+            <div class="message-content">
+                <div class="message-title">一周小结 <span class="badge">2</span></div>
+                <div class="message-desc">查收你的企业微信一周小结</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

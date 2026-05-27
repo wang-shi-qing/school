@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生请假申请</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+        }
+        /* 顶部标签栏 */
+        .tab-bar {
+            display: flex;
+            background-color: #004e98;
+            color: white;
+        }
+        .tab-item {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .tab-item.active {
+            background-color: #0066cc;
+        }
+        /* 内容容器 */
+        .content {
+            display: none;
+            padding: 20px;
+        }
+        .content.active {
+            display: block;
+        }
+
+        /* ========== 处理表单页（静态展示+修改弹窗） ========== */
+        .process-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .process-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #eef1f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .header-info .title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        .header-info .meta {
+            font-size: 14px;
+            color: #999;
+        }
+        .status-tag {
+            margin-left: auto;
+            background-color: #000;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+        .process-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            padding: 20px 20px 10px;
+        }
+        .process-list {
+            padding: 0 20px 20px;
+        }
+        .process-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .process-item:last-child {
+            border-bottom: none;
+        }
+        .label {
+            color: #666;
+            font-size: 16px;
+        }
+        .value {
+            color: #333;
+            font-size: 16px;
+            text-align: right;
+        }
+        .process-btn {
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+        }
+        .process-btn button {
+            background-color: #ddd;
+            color: #666;
+            border: none;
+            padding: 12px 80px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: default;
+        }
+        .edit-btn {
+            text-align: center;
+            margin-top: 10px;
+            padding-bottom: 20px;
+        }
+        .edit-btn button {
+            background-color: #004e98;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        /* 修改表单弹窗 */
+        .edit-form {
+            display: none;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .edit-form.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .btn-group {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn-group button {
+            background-color: #004e98;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        .btn-group .cancel-btn {
+            background-color: #ddd;
+            color: #666;
+        }
+
+        /* ========== 表单预览页 ========== */
+        .preview-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .school-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: auto;
+            height: 60px;
+            margin-right: 10px;
+        }
+        .school-name {
+            font-size: 14px;
+            color: #666;
+        }
+        h1 {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            font-size: 14px;
+        }
+        th {
+            background-color: #f9f9f9;
+            width: 15%;
+            text-align: center;
+        }
+        .textarea-td {
+            height: 80px;
+            vertical-align: top;
+        }
+        .approval-td {
+            height: 80px;
+            vertical-align: top;
+        }
+
+        /* ========== 查看流程页 ========== */
+        .flow-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .flow-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #004e98;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        .step-status {
+            font-size: 14px;
+            color: #009933;
+            margin-top: 5px;
+        }
+        .step-time {
+            font-size: 12px;
+            color: #999;
+            margin-top: 3px;
+        }
+        .flow-line {
+            width: 2px;
+            height: 30px;
+            background-color: #ddd;
+            margin-left: 19px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部标签栏 -->
+    <div class="tab-bar">
+        <div class="tab-item active" onclick="switchTab('process')">处理表单</div>
+        <div class="tab-item" onclick="switchTab('preview')">表单预览</div>
+        <div class="tab-item" onclick="switchTab('flow')">查看流程</div>
+    </div>
+
+    <!-- ========== 处理表单页（静态展示+修改弹窗） ========== -->
+    <div id="processContent" class="content active">
+        <div class="process-container">
+            <div class="process-header">
+                <div class="avatar">
+                    <img id="processAvatar" src="avatar.png" alt="头像">
+                </div>
+                <div class="header-info">
+                    <div class="title">学生请假申请</div>
+                    <div class="meta" id="processMeta"></div>
+                </div>
+                <div class="status-tag">已办结</div>
+            </div>
+
+            <div class="process-title">学生请假申请</div>
+
+            <div class="process-list">
+                <div class="process-item"><div class="label">姓名</div><div class="value" id="processName"></div></div>
+                <div class="process-item"><div class="label">学号</div><div class="value" id="processStudentId"></div></div>
+                <div class="process-item"><div class="label">性别</div><div class="value" id="processGender"></div></div>
+                <div class="process-item"><div class="label">联系方式</div><div class="value" id="processPhone"></div></div>
+                <div class="process-item"><div class="label">学院</div><div class="value" id="processCollege"></div></div>
+                <div class="process-item"><div class="label">班级</div><div class="value" id="processClass"></div></div>
+                <div class="process-item"><div class="label">所属校区</div><div class="value" id="processCampus"></div></div>
+                <div class="process-item"><div class="label">宿舍号</div><div class="value" id="processDorm"></div></div>
+                <div class="process-item"><div class="label">请假开始时间</div><div class="value" id="processStartTime"></div></div>
+                <div class="process-item"><div class="label">请假结束时间</div><div class="value" id="processEndTime"></div></div>
+                <div class="process-item"><div class="label">请假时长</div><div class="value" id="processDuration"></div></div>
+                <div class="process-item"><div class="label">请假事由</div><div class="value" id="processReason"></div></div>
+            </div>
+
+            <div class="process-btn">
+                <button disabled>后续处理</button>
+            </div>
+
+            <div class="edit-btn">
+                <button onclick="toggleEditForm()">修改信息</button>
+            </div>
+        </div>
+
+        <!-- 修改表单弹窗（可修改所有信息） -->
+        <div class="edit-form" id="editForm">
+            <div class="form-group">
+                <label>上传头像</label>
+                <input type="file" id="avatarInput" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>姓名</label>
+                <input type="text" id="editName">
+            </div>
+            <div class="form-group">
+                <label>学号</label>
+                <input type="text" id="editStudentId">
+            </div>
+            <div class="form-group">
+                <label>性别</label>
+                <input type="text" id="editGender">
+            </div>
+            <div class="form-group">
+                <label>联系方式</label>
+                <input type="text" id="editPhone">
+            </div>
+            <div class="form-group">
+                <label>学院</label>
+                <input type="text" id="editCollege">
+            </div>
+            <div class="form-group">
+                <label>班级</label>
+                <input type="text" id="editClass">
+            </div>
+            <div class="form-group">
+                <label>所属校区</label>
+                <input type="text" id="editCampus">
+            </div>
+            <div class="form-group">
+                <label>宿舍号</label>
+                <input type="text" id="editDorm">
+            </div>
+            <div class="form-group">
+                <label>请假开始时间</label>
+                <input type="datetime-local" id="editStartTime">
+            </div>
+            <div class="form-group">
+                <label>请假结束时间</label>
+                <input type="datetime-local" id="editEndTime">
+            </div>
+            <div class="form-group">
+                <label>请假事由</label>
+                <textarea id="editReason" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>辅导员意见</label>
+                <textarea id="editAdvisorOpinion" rows="3"></textarea>
+            </div>
+
+            <div class="btn-group">
+                <button onclick="saveAndRefresh()">保存修改</button>
+                <button class="cancel-btn" onclick="toggleEditForm()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 表单预览页 ========== -->
+    <div id="previewContent" class="content">
+        <div class="preview-container">
+            <div class="school-header">
+                <img src="logo.png" alt="山西工商学院校徽" class="logo">
+            </div>
+
+            <h1>山西工商学院学生请假申请</h1>
+
+            <table>
+                <tr>
+                    <th>姓名*</th>
+                    <td id="previewName"></td>
+                    <th>学号*</th>
+                    <td id="previewStudentId"></td>
+                </tr>
+                <tr>
+                    <th>性别</th>
+                    <td id="previewGender"></td>
+                    <th>联系方式*</th>
+                    <td id="previewPhone"></td>
+                </tr>
+                <tr>
+                    <th>学院*</th>
+                    <td id="previewCollege"></td>
+                    <th>班级*</th>
+                    <td id="previewClass"></td>
+                </tr>
+                <tr>
+                    <th>所属校区*</th>
+                    <td id="previewCampus"></td>
+                    <th>宿舍号</th>
+                    <td id="previewDorm"></td>
+                </tr>
+                <tr>
+                    <th>请假开始时间*</th>
+                    <td id="previewStartTime"></td>
+                    <th>请假结束时间*</th>
+                    <td id="previewEndTime"></td>
+                </tr>
+                <tr>
+                    <th>请假时长</th>
+                    <td colspan="3" id="previewDuration">0.2 天</td>
+                </tr>
+                <tr>
+                    <th>请假事由*</th>
+                    <td colspan="3" class="textarea-td" id="previewReason"></td>
+                </tr>
+                <tr>
+                    <th>附件（证明材料）</th>
+                    <td colspan="3" id="previewAttachment"></td>
+                </tr>
+                <tr>
+                    <th>辅导员意见</th>
+                    <td colspan="3" class="approval-td" id="previewAdvisorOpinion"></td>
+                </tr>
+                <tr>
+                    <th>二级学院意见</th>
+                    <td colspan="3" id="previewCollegeOpinion"></td>
+                </tr>
+                <tr>
+                    <th>学生处审批</th>
+                    <td colspan="3" id="previewStudentOfficeOpinion"></td>
+                </tr>
+                <tr>
+                    <th>分管校领导审批</th>
+                    <td colspan="3" id="previewLeaderOpinion"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ========== 查看流程页 ========== -->
+    <div id="flowContent" class="content">
+        <div class="flow-container">
+            <div class="flow-title">请假申请审批流程</div>
+
+            <div class="flow-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">学生提交申请</div>
+                    <div class="step-status">已完成</div>
+                    <div class="step-time" id="submitTime"></div>
+                </div>
+            </div>
+            <div class="flow-line"></div>
+
+            <div class="flow-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">辅导员审批</div>
+                    <div class="step-status">已通过</div>
+                    <div class="step-time">2026-04-28 09:00:00</div>
+                </div>
+            </div>
+            <div class="flow-line"></div>
+
+            <div class="flow-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">二级学院审批</div>
+                    <div class="step-status">待处理</div>
+                    <div class="step-time">-</div>
+                </div>
+            </div>
+            <div class="flow-line"></div>
+
+            <div class="flow-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">学生处审批</div>
+                    <div class="step-status">待处理</div>
+                    <div class="step-time">-</div>
+                </div>
+            </div>
+            <div class="flow-line"></div>
+
+            <div class="flow-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <div class="step-title">分管校领导审批</div>
+                    <div class="step-status">待处理</div>
+                    <div class="step-time">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 头像预览
+        document.getElementById('avatarInput').addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('processAvatar').src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+        // 切换修改表单弹窗显示
+        function toggleEditForm() {
+            document.getElementById('editForm').classList.toggle('active');
+        }
+
+        // 保存修改并刷新所有页面
+        function saveAndRefresh() {
+            const avatar = document.getElementById('processAvatar').src || '';
+            const data = {
+                avatar: avatar,
+                name: document.getElementById('editName').value,
+                studentId: document.getElementById('editStudentId').value,
+                gender: document.getElementById('editGender').value,
+                phone: document.getElementById('editPhone').value,
+                college: document.getElementById('editCollege').value,
+                class: document.getElementById('editClass').value,
+                campus: document.getElementById('editCampus').value,
+                dorm: document.getElementById('editDorm').value,
+                startTime: document.getElementById('editStartTime').value,
+                endTime: document.getElementById('editEndTime').value,
+                reason: document.getElementById('editReason').value,
+                advisorOpinion: document.getElementById('editAdvisorOpinion').value
+            };
+            localStorage.setItem('leaveSettings', JSON.stringify(data));
+            alert('✅ 信息已保存！三个页面的信息已同步更新');
+            renderAllPages();
+            toggleEditForm();
+        }
+
+        // 渲染所有页面（从本地存储读取数据）
+        function renderAllPages() {
+            const saved = localStorage.getItem('leaveSettings');
+            if (!saved) return;
+            const data = JSON.parse(saved);
+
+            // 渲染处理表单页（静态展示）
+            document.getElementById('processAvatar').src = data.avatar || 'avatar.png';
+            document.getElementById('processMeta').textContent = `${data.name || '未设置'} 2026-04-28 07:58:15`;
+            document.getElementById('processName').textContent = data.name || '';
+            document.getElementById('processStudentId').textContent = data.studentId || '';
+            document.getElementById('processGender').textContent = data.gender || '';
+            document.getElementById('processPhone').textContent = data.phone || '';
+            document.getElementById('processCollege').textContent = data.college || '';
+            document.getElementById('processClass').textContent = data.class || '';
+            document.getElementById('processCampus').textContent = data.campus || '';
+            document.getElementById('processDorm').textContent = data.dorm || '';
+            document.getElementById('processStartTime').textContent = data.startTime ? new Date(data.startTime).toLocaleString() : '';
+            document.getElementById('processEndTime').textContent = data.endTime ? new Date(data.endTime).toLocaleString() : '';
+            document.getElementById('processReason').textContent = data.reason || '';
+
+            // 渲染表单预览页
+            document.getElementById('previewName').textContent = data.name || '';
+            document.getElementById('previewStudentId').textContent = data.studentId || '';
+            document.getElementById('previewGender').textContent = data.gender || '';
+            document.getElementById('previewPhone').textContent = data.phone || '';
+            document.getElementById('previewCollege').textContent = data.college || '';
+            document.getElementById('previewClass').textContent = data.class || '';
+            document.getElementById('previewCampus').textContent = data.campus || '';
+            document.getElementById('previewDorm').textContent = data.dorm || '';
+            document.getElementById('previewStartTime').textContent = data.startTime ? new Date(data.startTime).toLocaleString() : '';
+            document.getElementById('previewEndTime').textContent = data.endTime ? new Date(data.endTime).toLocaleString() : '';
+            document.getElementById('previewReason').textContent = data.reason || '';
+            document.getElementById('previewAdvisorOpinion').textContent = data.advisorOpinion || '处理意见：同意请假，在宿舍休息\n姓名/签名：乔佩瑜\n处理时间：2026年04月28日';
+
+            // 自动计算请假时长（小时/天）
+            if (data.startTime && data.endTime) {
+                const start = new Date(data.startTime);
+                const end = new Date(data.endTime);
+                const diffHours = ((end - start) / 1000 / 60 / 60).toFixed(1);
+                const diffDays = ((end - start) / 1000 / 60 / 60 / 24).toFixed(1);
+                document.getElementById('processDuration').textContent = diffHours;
+                document.getElementById('previewDuration').textContent = `${diffDays} 天`;
+            }
+
+            // 更新查看流程的提交时间
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('submitTime').textContent = `${today} 07:58:15`;
+
+            // 填充修改表单的初始值
+            document.getElementById('editName').value = data.name || '';
+            document.getElementById('editStudentId').value = data.studentId || '';
+            document.getElementById('editGender').value = data.gender || '';
+            document.getElementById('editPhone').value = data.phone || '';
+            document.getElementById('editCollege').value = data.college || '';
+            document.getElementById('editClass').value = data.class || '';
+            document.getElementById('editCampus').value = data.campus || '';
+            document.getElementById('editDorm').value = data.dorm || '';
+            document.getElementById('editStartTime').value = data.startTime || '';
+            document.getElementById('editEndTime').value = data.endTime || '';
+            document.getElementById('editReason').value = data.reason || '';
+            document.getElementById('editAdvisorOpinion').value = data.advisorOpinion || '';
+        }
+
+        // 标签切换函数
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.tab-item[onclick="switchTab('${tab}')"]`).classList.add('active');
+
+            document.querySelectorAll('.content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tab}Content`).classList.add('active');
+        }
+
+        // 页面加载时初始化默认数据
+        window.onload = function() {
+            const initialData = {
+                name: "赵润桐",
+                studentId: "2023090340545",
+                gender: "女",
+                phone: "13327401495",
+                college: "计算机信息工程学院",
+                class: "23计科五班",
+                campus: "北格校区",
+                dorm: "623",
+                startTime: "2026-04-28T08:49",
+                endTime: "2026-04-28T11:58",
+                reason: "头晕需休息",
+                advisorOpinion: "处理意见：同意请假，在宿舍休息\n姓名/签名：乔佩瑜\n处理时间：2026年04月28日"
+            };
+            localStorage.setItem('leaveSettings', JSON.stringify(initialData));
+            renderAllPages();
+        };
+    </script>
+</body>
+</html>
